@@ -26,6 +26,10 @@ It would be better to parse the PICO-8 Lua syntax properly, but without that, th
 
 It would also be better to load and parse the sample files in automated tests.
 
+## Build and Release
+
+https://code.visualstudio.com/api/working-with-extensions/publishing-extension
+
 ## Release Notes
 
 See [CHANGELOG.md](CHANGELOG.md) for more information.
