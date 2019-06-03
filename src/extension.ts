@@ -9,11 +9,17 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() { }
 
+/**
+ * Keep track of where each tab starts.
+ */
 class TabMeta {
 	constructor(
 		readonly range: vscode.Range) { }
 }
 
+/**
+ * Links tabs to their functions and their starting lines.
+ */
 class SymbolStore {
 	currentTab: number
 	readonly tabFns: Map<number, Array<vscode.DocumentSymbol>>
@@ -27,6 +33,9 @@ class SymbolStore {
 		this.tabMetas.set(0, new TabMeta(new vscode.Range(new vscode.Position(2, 0), new vscode.Position(2, 0))))
 	}
 
+	/**
+	 * Call this to add a function when one is found.
+	 */
 	add(fn: vscode.DocumentSymbol) {
 		let fns = this.tabFns.get(this.currentTab)
 		if (!fns) {
@@ -36,6 +45,9 @@ class SymbolStore {
 		fns.push(fn)
 	}
 
+	/**
+	 * Call this when a tab break is found.
+	 */
 	advanceTab(range: vscode.Range) {
 		this.currentTab += 1
 		const tabMeta = new TabMeta(range)
@@ -43,6 +55,8 @@ class SymbolStore {
 	}
 
 	/**
+	 * Generates the final symbol hierarchy in VS Code terms.
+	 *
 	 * Runs either a flat listing of functions if not tabs,
 	 * or tabs with functions below each.
 	 */
@@ -72,6 +86,11 @@ class SymbolStore {
 	}
 }
 
+/**
+ * Loop through the lines of the file. When tabs or functions are
+ * found, save them in the store. At the end, report the store's
+ * final state back to VS Code.
+ */
 class Pico8DocumentSymbolProvider implements vscode.DocumentSymbolProvider {
 	public provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.ProviderResult<vscode.DocumentSymbol[]> {
 		const store = new SymbolStore()
