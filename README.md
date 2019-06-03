@@ -12,7 +12,7 @@ to group functions by tabs, if any.
 
 ![Screenshot](screenshot.png)
 
-with tabs:
+### With tabs:
 
 ![Screenshot with Tabs](screenshot-tab.png)
 
