@@ -2,7 +2,7 @@
 	"name": "pico8-simple-outline",
 	"displayName": "pico8-simple-outline",
 	"description": "For PICO-8 files (*.p8), display functions in the Outline by using a rudimentary regex.",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/hiddenwaffle/pico8-simple-outline"
