@@ -4,6 +4,10 @@ All notable changes to the "pico8-simple-outline" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 0.3.0
+
+- Merged PR from Fresh-D101 to include a tab naming convention with comments
+
 ## 0.2.0
 
 - Merged PR from dependabot to bump an updated to a the node-https-proxy-agent dependency.
