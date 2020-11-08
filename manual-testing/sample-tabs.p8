@@ -7,6 +7,7 @@ __lua__
 -- and two functions under tabs 0 and 1,
 -- no functions under tab 2,
 -- and one function under tab 3.
+-- Tab 2 should use the new line comment ('Stuff') as its name
 
 function tab0_a()
   local not_a_tab = '-->8'
@@ -26,6 +27,7 @@ end
 -->8
 
 -->8
+-- Stuff
 
 function tab3_a()
 end

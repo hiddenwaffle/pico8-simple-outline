@@ -8,13 +8,17 @@ on *.p8 files to fill the Outline view of Visual Studio Code with function names
 ```
 /^-->8$/
 ```
-to group functions by tabs, if any.
+to group functions by tabs, if any. Tabs are named if next line is a comment.
 
 ![Screenshot](screenshot.png)
 
 ### With tabs:
 
-![Screenshot with Tabs](screenshot-tab.png)
+![Screenshot with tabs](screenshot-tab.png)
+
+### With named tab:
+
+![Screenshot with named tabs](screenshot-named-tab.png)
 
 ## Requirements
 
