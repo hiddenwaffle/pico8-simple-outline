@@ -14,7 +14,8 @@ export function deactivate() { }
  */
 class TabMeta {
 	constructor(
-		readonly range: vscode.Range) { }
+		readonly range: vscode.Range,
+		readonly name: string) { }
 }
 
 /**
@@ -29,8 +30,6 @@ class SymbolStore {
 		this.currentTab = 0
 		this.tabFns = new Map()
 		this.tabMetas = new Map()
-		// Special case: There is always a tab 0. Range is the start of the Lua section.
-		this.tabMetas.set(0, new TabMeta(new vscode.Range(new vscode.Position(2, 0), new vscode.Position(2, 0))))
 	}
 
 	/**
@@ -48,9 +47,9 @@ class SymbolStore {
 	/**
 	 * Call this when a tab break is found.
 	 */
-	advanceTab(range: vscode.Range) {
+	advanceTab(range: vscode.Range, name: string) {
 		this.currentTab += 1
-		const tabMeta = new TabMeta(range)
+		const tabMeta = new TabMeta(range, name)
 		this.tabMetas.set(this.currentTab, tabMeta)
 	}
 
@@ -69,8 +68,12 @@ class SymbolStore {
 				const fns = this.tabFns.get(i)
 				const tabMeta = this.tabMetas.get(i)
 				if (tabMeta) {
+					var name = i.toString()
+					if(tabMeta.name.length > 0){
+						name = tabMeta.name 
+					}
 					const tabSymbol = new vscode.DocumentSymbol(
-						'' + i,
+						name,
 						'',
 						vscode.SymbolKind.Field,
 						tabMeta.range,
@@ -94,10 +97,24 @@ class SymbolStore {
 class Pico8DocumentSymbolProvider implements vscode.DocumentSymbolProvider {
 	public provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.ProviderResult<vscode.DocumentSymbol[]> {
 		const store = new SymbolStore()
+
+		//Special case for first tab
+		const firstTabLine = document.lineAt(3)
+		var firstName = ''
+		if(firstTabLine.text.match(/^--/)){
+			firstName = firstTabLine.text.replace(/-/g,'').trim()
+		}
+		store.tabMetas.set(0, new TabMeta(new vscode.Range(new vscode.Position(2, 0), new vscode.Position(2, 0)), firstName))
+
 		for (let i = 0; i < document.lineCount; i++) {
 			const line = document.lineAt(i)
 			if (line.text.match(/^-->8/)) {
-				store.advanceTab(line.range)
+				const nextLine = document.lineAt(i+1)
+				var name = ''
+				if(nextLine.text.match(/^--/)){
+					name = nextLine.text.replace(/-/g,'').trim()
+				}
+				store.advanceTab(line.range, name)
 			} else if (line.text.match(/^ *function /i)) {
 				const functionName = line.text.replace(/^ *function /i, '').replace(/\(.*/, '').trim()
 				// Must validate that it is not blank, otherwise it will report others incorrectly.
